@@ -2,11 +2,11 @@ name: trump-trade-monitor
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # every 30 minutes
-  workflow_dispatch: {}        # lets you press "Run" manually to test
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
 
 permissions:
-  contents: write              # needed so it can save its memory back to the repo
+  contents: write
 
 concurrency:
   group: monitor
@@ -31,6 +31,7 @@ jobs:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_TO:  ${{ secrets.EMAIL_TO }}
+          TWELVEDATA_API_KEY: ${{ secrets.TWELVEDATA_API_KEY }}
         run: python trump_trade_monitor.py
 
       - name: Save memory (state) back to the repo
