@@ -1,32 +1,19 @@
 #!/usr/bin/env python3
 """
-trump_trade_monitor.py  --  all-in-one watcher
-==============================================
+trump_trade_monitor.py  --  all-in-one watcher  (v2: reliable prices)
+=====================================================================
 
 Three jobs, one email pipeline:
+  1) FILINGS   -- new Trump OGE filings -> instant alert.
+  2) MENTIONS  -- news tying Trump to a held stock -> instant flag.
+  3) TRACKER   -- real prices: return since buy date (and since comment date),
+                  plus closed-position flags. Daily digest + weekly recap.
 
-  1) FILINGS   -- watches the OGE public disclosure database and alerts you the
-                  moment a new Trump filing posts (new trades / annual report).
-  2) MENTIONS  -- scans news coverage for fresh articles that tie Trump to a
-                  company he holds, and flags them for your review.
-  3) TRACKER   -- pulls real stock prices and reports each holding's return
-                  since the buy date (and since any public-comment date),
-                  plus flags closed positions.
-
-EMAILS:
-  - INSTANT  -> sent any run where a new filing or new news mention is found.
-  - DAILY    -> one digest each morning with the return tracker table.
-  - WEEKLY   -> a Monday recap of the week's filings, mentions, and returns.
-
-HONEST LIMITS (so the email never oversells what it knows):
-  - Filings are lagged ~45 days by law. This catches them when PUBLISHED.
-  - News matching is a heuristic flag, not proof he "named a stock he owns."
-    It errs toward over-flagging. You review the article.
-  - Tracker shows the STOCK's performance, not his actual dollar profit
-    (the filings disclose only value ranges, never share counts or prices).
-
-NO external libraries. Pure Python 3 standard library. Designed to be run
-once per scheduled tick (GitHub Actions calls it on a cron; see SETUP_GUIDE).
+v2 change: prices now come from Twelve Data (a real keyed API) with Stooq as a
+silent fallback. This fixes the "n/a" columns. You add ONE secret named
+TWELVEDATA_API_KEY (see SETUP). Price lookups only happen on the first run,
+the daily digest, and the weekly recap -- so you use ~14 of your 800 free
+daily calls. No external libraries; pure Python 3 standard library.
 """
 
 import os
@@ -39,14 +26,9 @@ import html
 import smtplib
 import logging
 import urllib.request
-import urllib.error
 from email.message import EmailMessage
 from datetime import datetime, timezone, timedelta
 
-# ----------------------------------------------------------------------------
-# CONFIG  -- in GitHub Actions these come from "Secrets". Locally you can edit
-# the defaults, but DO NOT paste your password here if you'll upload the file.
-# ----------------------------------------------------------------------------
 CFG = {
     "NAME_FILTER": os.getenv("OGE_NAME_FILTER", "Trump"),
     "SMTP_HOST": os.getenv("SMTP_HOST", "smtp.gmail.com"),
@@ -55,8 +37,7 @@ CFG = {
     "SMTP_PASS": os.getenv("SMTP_PASS", ""),
     "EMAIL_FROM": os.getenv("EMAIL_FROM", os.getenv("SMTP_USER", "")),
     "EMAIL_TO": os.getenv("EMAIL_TO", os.getenv("SMTP_USER", "")),
-    # Hour (UTC) after which the daily digest / weekly summary may send.
-    # 13 UTC is ~9am US Eastern in summer.
+    "TD_KEY": os.getenv("TWELVEDATA_API_KEY", ""),
     "DAILY_HOUR_UTC": int(os.getenv("DAILY_HOUR_UTC", "13")),
     "HOLDINGS_FILE": os.getenv("HOLDINGS_FILE", "holdings.json"),
     "STATE_FILE": os.getenv("STATE_FILE", "state.json"),
@@ -70,8 +51,7 @@ VIEW_URLS = [
 LINK_RE = re.compile(
     r"/201/Presiden\.nsf/PAS\+Index/([0-9A-Fa-f]{16,})/\$[Ff][Ii][Ll][Ee]/([^\"'>\s]+?\.pdf)"
 )
-
-HEADERS = {"User-Agent": "Mozilla/5.0 (TradeMonitor/1.0; personal use)",
+HEADERS = {"User-Agent": "Mozilla/5.0 (TradeMonitor/2.0; personal use)",
            "Accept-Encoding": "identity"}
 
 logging.basicConfig(level=logging.INFO,
@@ -79,7 +59,6 @@ logging.basicConfig(level=logging.INFO,
 log = logging.getLogger("monitor")
 
 
-# ---------------------------- tiny helpers ----------------------------------
 def http_get(url, binary=False, timeout=45):
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, timeout=timeout,
@@ -102,7 +81,7 @@ def load_json(path, default):
     except FileNotFoundError:
         return default
     except Exception as e:
-        log.warning("Bad %s (%s); using default.", path, e)
+        log.warning("Bad %s (%s); default.", path, e)
         return default
 
 
@@ -115,7 +94,6 @@ def now_utc():
     return datetime.now(timezone.utc)
 
 
-# ---------------------------- 1) FILINGS ------------------------------------
 def fetch_filings():
     page = None
     for u in VIEW_URLS:
@@ -146,128 +124,148 @@ def fetch_filings():
 def check_filings(state):
     alerts = []
     nf = CFG["NAME_FILTER"].lower()
-    filings = fetch_filings()
-    targets = [f for f in filings if nf in f["filer"].lower()]
+    targets = [f for f in fetch_filings() if nf in f["filer"].lower()]
     seen = set(state.get("seen_filings", []))
-    first_run = not seen
+    first = not seen
     for f in targets:
         if f["id"] not in seen:
             seen.add(f["id"])
-            if not first_run:
+            if not first:
                 alerts.append(
-                    f"NEW FILING: {f['filer']} — {f['ftype']} (filed {f['date']})\n"
+                    f"NEW FILING: {f['filer']} \u2014 {f['ftype']} (filed {f['date']})\n"
                     f"  {f['url']}\n"
-                    f"  Worth a look: does it record a SALE of a tracked name "
-                    f"shortly before bad news for that stock?")
+                    f"  Check: does it record a SALE of a tracked name shortly "
+                    f"before bad news for that stock?")
     state["seen_filings"] = sorted(seen)
     return alerts
 
 
-# ---------------------------- 2) MENTIONS -----------------------------------
 def google_news(query):
     url = ("https://news.google.com/rss/search?q="
            + urllib.request.quote(query) + "&hl=en-US&gl=US&ceid=US:en")
     try:
         xml = http_get(url)
     except Exception as e:
-        log.warning("News fetch failed (%s): %s", query, e)
+        log.warning("News failed (%s): %s", query, e)
         return []
     items = []
-    for block in re.findall(r"<item>(.*?)</item>", xml, re.S):
-        t = re.search(r"<title>(.*?)</title>", block, re.S)
-        l = re.search(r"<link>(.*?)</link>", block, re.S)
-        d = re.search(r"<pubDate>(.*?)</pubDate>", block, re.S)
-        if not t:
-            continue
-        items.append({"title": html.unescape(t.group(1).strip()),
-                      "link": (l.group(1).strip() if l else ""),
-                      "pub": (d.group(1).strip() if d else "")})
+    for b in re.findall(r"<item>(.*?)</item>", xml, re.S):
+        t = re.search(r"<title>(.*?)</title>", b, re.S)
+        l = re.search(r"<link>(.*?)</link>", b, re.S)
+        d = re.search(r"<pubDate>(.*?)</pubDate>", b, re.S)
+        if t:
+            items.append({"title": html.unescape(t.group(1).strip()),
+                          "link": l.group(1).strip() if l else "",
+                          "pub": d.group(1).strip() if d else ""})
     return items
 
 
 def check_mentions(state, holdings):
     alerts = []
     seen = set(state.get("seen_news", []))
-    first_run = not seen
+    first = not seen
     for h in holdings:
         if h.get("status") == "closed":
             continue
         for alias in h.get("aliases", [h["name"]]):
             for it in google_news(f'Trump {alias}'):
-                key = f"{h['ticker']}|{it['title']}"
-                hid = str(abs(hash(key)))
+                hid = str(abs(hash(f"{h['ticker']}|{it['title']}")))
                 if hid in seen:
                     continue
                 seen.add(hid)
-                if first_run:
+                if first:
                     continue
-                # Only flag if the holding name actually appears in the headline.
                 if alias.lower() in it["title"].lower():
                     alerts.append(
-                        f"NEWS MENTION — {h['name']} ({h['ticker']}), a tracked holding:\n"
-                        f"  \"{it['title']}\"\n"
-                        f"  {it['link']}\n"
-                        f"  ({it['pub']}) — heuristic flag; confirm he actually named it.")
-    state["seen_news"] = sorted(seen)[-4000:]  # cap memory
+                        f"NEWS MENTION \u2014 {h['name']} ({h['ticker']}), a tracked holding:\n"
+                        f"  \"{it['title']}\"\n  {it['link']}\n"
+                        f"  ({it['pub']}) \u2014 heuristic flag; confirm he actually named it.")
+    state["seen_news"] = sorted(seen)[-4000:]
     return alerts
 
 
-# ---------------------------- 3) TRACKER ------------------------------------
-def stooq_latest(ticker):
-    url = f"https://stooq.com/q/l/?s={ticker.lower()}.us&f=sd2t2ohlcv&h&e=csv"
+def td_series(ticker, start_date):
+    if not CFG["TD_KEY"]:
+        return None
+    end = now_utc().strftime("%Y-%m-%d")
+    url = (f"https://api.twelvedata.com/time_series?symbol={ticker}"
+           f"&interval=1day&start_date={start_date}&end_date={end}"
+           f"&outputsize=5000&apikey={CFG['TD_KEY']}")
     try:
-        rows = list(csv.DictReader(io.StringIO(http_get(url))))
+        data = json.loads(http_get(url))
+    except Exception as e:
+        log.warning("TD fetch failed %s: %s", ticker, e)
+        return None
+    if data.get("status") != "ok" or "values" not in data:
+        log.warning("TD no data %s: %s", ticker,
+                    data.get("message", data.get("status")))
+        return None
+    return {r["datetime"]: float(r["close"]) for r in data["values"] if r.get("close")}
+
+
+def close_on_or_after(series, target):
+    if not series:
+        return None
+    for d in sorted(series):
+        if d >= target:
+            return series[d]
+    return None
+
+
+def stooq_latest(ticker):
+    try:
+        rows = list(csv.DictReader(io.StringIO(http_get(
+            f"https://stooq.com/q/l/?s={ticker.lower()}.us&f=sd2t2ohlcv&h&e=csv"))))
         c = rows[0].get("Close")
         return float(c) if c not in (None, "", "N/D") else None
-    except Exception as e:
-        log.warning("Latest price failed %s: %s", ticker, e)
+    except Exception:
         return None
 
 
 def stooq_close_on(ticker, date_str):
-    """Close on/near a date (widen a few days for weekends/holidays)."""
     try:
         d = datetime.strptime(date_str, "%Y-%m-%d")
     except Exception:
         return None
-    d1 = d.strftime("%Y%m%d")
-    d2 = (d + timedelta(days=6)).strftime("%Y%m%d")
-    url = (f"https://stooq.com/q/d/l/?s={ticker.lower()}.us&d1={d1}&d2={d2}&i=d")
+    url = (f"https://stooq.com/q/d/l/?s={ticker.lower()}.us"
+           f"&d1={d.strftime('%Y%m%d')}&d2={(d+timedelta(days=6)).strftime('%Y%m%d')}&i=d")
     try:
-        rows = list(csv.DictReader(io.StringIO(http_get(url))))
-        for r in rows:
+        for r in csv.DictReader(io.StringIO(http_get(url))):
             if r.get("Close") not in (None, "", "N/D"):
                 return float(r["Close"])
-    except Exception as e:
-        log.warning("Hist price failed %s: %s", ticker, e)
+    except Exception:
+        pass
     return None
 
 
-def build_tracker(holdings):
-    lines, rows = [], []
-    for h in holdings:
-        entry = stooq_close_on(h["ticker"], h["buy_date"])
-        cur = stooq_latest(h["ticker"])
-        ret = None
-        if entry and cur:
-            ret = (cur - entry) / entry * 100.0
-        comment_ret = None
+def prices_for(h):
+    series = td_series(h["ticker"], h["buy_date"])
+    entry = cur = cbase = None
+    if series:
+        cur = series[sorted(series)[-1]]
+        entry = close_on_or_after(series, h["buy_date"])
         if h.get("comment_date"):
-            cp = stooq_close_on(h["ticker"], h["comment_date"])
-            if cp and cur:
-                comment_ret = (cur - cp) / cp * 100.0
-        rows.append({"h": h, "entry": entry, "cur": cur,
-                     "ret": ret, "cret": comment_ret})
-    # text table
-    lines.append(f"{'TICKER':7} {'BUY DATE':11} {'ENTRY':>9} {'NOW':>9} "
-                 f"{'RET%':>8} {'SINCE CMT%':>11}  STATUS")
-    lines.append("-" * 72)
-    for r in rows:
-        h = r["h"]
-        e = f"${r['entry']:.2f}" if r["entry"] else "  n/a"
-        c = f"${r['cur']:.2f}" if r["cur"] else "  n/a"
-        rr = f"{r['ret']:+.1f}%" if r["ret"] is not None else "   n/a"
-        cr = f"{r['cret']:+.1f}%" if r["cret"] is not None else "    n/a"
+            cbase = close_on_or_after(series, h["comment_date"])
+    if cur is None:
+        cur = stooq_latest(h["ticker"])
+    if entry is None:
+        entry = stooq_close_on(h["ticker"], h["buy_date"])
+    if cbase is None and h.get("comment_date"):
+        cbase = stooq_close_on(h["ticker"], h["comment_date"])
+    return entry, cur, cbase
+
+
+def build_tracker(holdings):
+    lines = [f"{'TICKER':7} {'BUY DATE':11} {'ENTRY':>9} {'NOW':>9} "
+             f"{'RET%':>8} {'SINCE CMT%':>11}  STATUS", "-" * 72]
+    for h in holdings:
+        entry, cur, cbase = prices_for(h)
+        ret = (cur - entry) / entry * 100 if entry and cur else None
+        cret = (cur - cbase) / cbase * 100 if cbase and cur else None
+        e = f"${entry:.2f}" if entry else "  n/a"
+        c = f"${cur:.2f}" if cur else "  n/a"
+        rr = f"{ret:+.1f}%" if ret is not None else "   n/a"
+        cr = f"{cret:+.1f}%" if cret is not None else "    n/a"
         lines.append(f"{h['ticker']:7} {h['buy_date']:11} {e:>9} {c:>9} "
                      f"{rr:>8} {cr:>11}  {h.get('status','open')}")
     lines.append("\nReturns are the STOCK's move, not his realized profit. "
@@ -275,10 +273,9 @@ def build_tracker(holdings):
     return "\n".join(lines)
 
 
-# ---------------------------- email -----------------------------------------
 def send_email(subject, body):
     if not CFG["SMTP_USER"] or not CFG["SMTP_PASS"]:
-        log.error("SMTP not configured; printing instead:\n%s\n%s", subject, body)
+        log.error("SMTP not set; printing:\n%s\n%s", subject, body)
         return
     msg = EmailMessage()
     msg["Subject"], msg["From"], msg["To"] = subject, CFG["EMAIL_FROM"], CFG["EMAIL_TO"]
@@ -294,60 +291,50 @@ def send_email(subject, body):
     log.info("Email sent: %s", subject)
 
 
-# ---------------------------- orchestration ---------------------------------
 def main():
     holdings = load_json(CFG["HOLDINGS_FILE"], {"holdings": []})["holdings"]
     state = load_json(CFG["STATE_FILE"], {})
     now = now_utc()
     today = now.strftime("%Y-%m-%d")
     iso_week = now.strftime("%G-W%V")
-    log_lines = state.get("event_log", [])
+    elog = state.get("event_log", [])
+    first = "seen_filings" not in state
 
-    first_run = "seen_filings" not in state
+    alerts = check_filings(state) + check_mentions(state, holdings)
 
-    # --- instant checks every run ---
-    alerts = []
-    alerts += check_filings(state)
-    alerts += check_mentions(state, holdings)
-
-    if first_run:
+    if first:
         latest = next((f for f in fetch_filings()
                        if CFG["NAME_FILTER"].lower() in f["filer"].lower()), None)
         intro = ("Trump trade monitor is live.\n\n"
                  f"Watching filer: {CFG['NAME_FILTER']}\n"
-                 f"Tracking {len(holdings)} holdings: "
-                 f"{', '.join(h['ticker'] for h in holdings)}\n\n")
+                 f"Tracking: {', '.join(h['ticker'] for h in holdings)}\n\n")
         if latest:
-            intro += f"Latest filing on record: {latest['ftype']} ({latest['date']})\n{latest['url']}\n\n"
-        intro += "You'll get: instant alerts on new filings/mentions, a daily tracker digest, and a weekly recap.\n\n"
+            intro += f"Latest filing: {latest['ftype']} ({latest['date']})\n{latest['url']}\n\n"
         intro += build_tracker(holdings)
         send_email("[Trump Monitor] Setup complete \u2014 it's running", intro)
     elif alerts:
         for a in alerts:
-            log_lines.append(f"{today}: " + a.splitlines()[0])
-        send_email(f"[Trump Monitor] {len(alerts)} new alert(s)",
-                   "\n\n".join(alerts))
+            elog.append(f"{today}: " + a.splitlines()[0])
+        send_email(f"[Trump Monitor] {len(alerts)} new alert(s)", "\n\n".join(alerts))
 
-    # --- daily digest ---
-    if (not first_run and now.hour >= CFG["DAILY_HOUR_UTC"]
+    if (not first and now.hour >= CFG["DAILY_HOUR_UTC"]
             and state.get("last_daily") != today):
         send_email(f"[Trump Monitor] Daily tracker \u2014 {today}",
                    "Return on tracked holdings:\n\n" + build_tracker(holdings))
         state["last_daily"] = today
 
-    # --- weekly summary (Mondays) ---
-    if (not first_run and now.weekday() == 0 and now.hour >= CFG["DAILY_HOUR_UTC"]
+    if (not first and now.weekday() == 0 and now.hour >= CFG["DAILY_HOUR_UTC"]
             and state.get("last_weekly") != iso_week):
-        recent = [l for l in log_lines if l >= (now - timedelta(days=7)).strftime("%Y-%m-%d")]
+        recent = [l for l in elog if l >= (now - timedelta(days=7)).strftime("%Y-%m-%d")]
         body = ("Weekly recap.\n\nEvents in the last 7 days:\n"
                 + ("\n".join(f"  - {l}" for l in recent) if recent else "  (none)")
                 + "\n\nCurrent tracker:\n\n" + build_tracker(holdings))
         send_email(f"[Trump Monitor] Weekly summary \u2014 {iso_week}", body)
         state["last_weekly"] = iso_week
 
-    state["event_log"] = log_lines[-500:]
+    state["event_log"] = elog[-500:]
     save_json(CFG["STATE_FILE"], state)
-    log.info("Run complete. %d instant alert(s).", 0 if first_run else len(alerts))
+    log.info("Run complete. first=%s alerts=%d", first, 0 if first else len(alerts))
 
 
 if __name__ == "__main__":
