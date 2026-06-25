@@ -1,0 +1,12 @@
+{
+  "_comment": "Edit this list anytime. ticker = stock symbol. aliases = names to look for in news. buy_date = approx date he bought (from OGE filings), used to measure return. comment_date = optional, a date he publicly named it. status 'open' or 'closed'. If closed, add sold_date.",
+  "holdings": [
+    { "ticker": "DELL", "name": "Dell Technologies", "aliases": ["Dell"], "buy_date": "2026-02-10", "comment_date": "2026-05-08", "status": "open" },
+    { "ticker": "NVDA", "name": "Nvidia", "aliases": ["Nvidia", "NVDA"], "buy_date": "2026-01-06", "comment_date": "", "status": "open" },
+    { "ticker": "AMD",  "name": "Advanced Micro Devices", "aliases": ["AMD", "Advanced Micro Devices"], "buy_date": "2026-01-06", "comment_date": "", "status": "open" },
+    { "ticker": "INTC", "name": "Intel", "aliases": ["Intel"], "buy_date": "2026-03-02", "comment_date": "", "status": "open" },
+    { "ticker": "PLTR", "name": "Palantir", "aliases": ["Palantir"], "buy_date": "2026-03-02", "comment_date": "", "status": "open" },
+    { "ticker": "AVGO", "name": "Broadcom", "aliases": ["Broadcom"], "buy_date": "2026-02-10", "comment_date": "", "status": "open" },
+    { "ticker": "ORCL", "name": "Oracle", "aliases": ["Oracle"], "buy_date": "2026-02-10", "comment_date": "", "status": "open" }
+  ]
+}
