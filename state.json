@@ -1,10 +1,6 @@
 {
   "seen_filings": [],
   "seen_news": [
-    "9217969336074078898",
-    "9217969594994810393",
-    "9218020935184323429",
-    "9218029366733875543",
     "9218033242454819568",
     "9218043622705992100",
     "9218052827287484992",
@@ -533,6 +529,7 @@
     "928190746146721270",
     "928209171376050222",
     "928228567215489918",
+    "928239350688488240",
     "928255861834381005",
     "928262518301520011",
     "928262807700655531",
@@ -935,6 +932,7 @@
     "936255570756272635",
     "936260368058168793",
     "936321089424786576",
+    "936325901518868010",
     "936362436257708428",
     "936375920893404572",
     "936391984391197870",
@@ -1162,6 +1160,7 @@
     "941247970964238295",
     "941274072124511758",
     "941291026294982869",
+    "941333167664487301",
     "9413561573412427",
     "9413642935503500",
     "941408656160030615",
@@ -2538,6 +2537,7 @@
     "969093181514404721",
     "969102784981582294",
     "969154116422082413",
+    "969161408271066589",
     "969179302022964517",
     "96924814083579148",
     "969249174360818077",
@@ -4074,7 +4074,6 @@
     "2026-08-17: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-08-17: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
@@ -4131,6 +4130,7 @@
     "2026-08-17: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
+    "2026-08-17: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
@@ -4504,6 +4504,6 @@
     "2026-08-17: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-17: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:"
   ],
-  "last_daily": "2026-08-16",
-  "last_weekly": "2026-W33"
+  "last_daily": "2026-08-17",
+  "last_weekly": "2026-W34"
 }
