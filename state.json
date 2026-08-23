@@ -1,8 +1,6 @@
 {
   "seen_filings": [],
   "seen_news": [
-    "939815191253381594",
-    "93982622693315143",
     "939864369844132551",
     "939886324664575130",
     "939910647582763232",
@@ -346,6 +344,7 @@
     "945092191658950614",
     "945113549377544085",
     "945115156102992836",
+    "945118113291822772",
     "945134853690372810",
     "945136013596254083",
     "945136907010692432",
@@ -3017,6 +3016,7 @@
     "98500337848930483",
     "985003927489509194",
     "985015875209091242",
+    "985019028083122462",
     "985039921856286348",
     "985045378532395003",
     "985056256107240192",
@@ -4003,13 +4003,6 @@
     "999995119665728187"
   ],
   "event_log": [
-    "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
@@ -4135,6 +4128,12 @@
     "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
@@ -4197,6 +4196,8 @@
     "2026-08-23: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
+    "2026-08-23: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
@@ -4372,7 +4373,6 @@
     "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
@@ -4504,6 +4504,6 @@
     "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-23: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:"
   ],
-  "last_daily": "2026-08-22",
+  "last_daily": "2026-08-23",
   "last_weekly": "2026-W34"
 }
