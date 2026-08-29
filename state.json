@@ -1,8 +1,6 @@
 {
   "seen_filings": [],
   "seen_news": [
-    "946875649962315986",
-    "946886241613944822",
     "946904865089139702",
     "946926578954399465",
     "946927159058647856",
@@ -2021,6 +2019,7 @@
     "973717647408771181",
     "973720446893907082",
     "973748092164797844",
+    "97376058494723703",
     "973790383168840104",
     "973797830209781499",
     "973807621020244690",
@@ -3184,6 +3183,7 @@
     "98894436660697807",
     "988946346244049248",
     "988949557668559711",
+    "988952193351067935",
     "988979142253882327",
     "988983858640555681",
     "989034937772623314",
@@ -4059,7 +4059,10 @@
     "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-08-29: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
+    "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
@@ -4186,8 +4189,7 @@
     "2026-08-29: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
-    "2026-08-29: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
-    "2026-08-29: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
+    "2026-08-29: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
@@ -4364,8 +4366,6 @@
     "2026-08-29: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
@@ -4504,6 +4504,6 @@
     "2026-08-29: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-08-29: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:"
   ],
-  "last_daily": "2026-08-28",
+  "last_daily": "2026-08-29",
   "last_weekly": "2026-W35"
 }
