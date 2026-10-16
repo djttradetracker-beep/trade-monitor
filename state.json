@@ -1,7 +1,6 @@
 {
   "seen_filings": [],
   "seen_news": [
-    "961201478204440561",
     "961214475564939494",
     "961215272008544553",
     "961225770630172807",
@@ -768,6 +767,7 @@
     "968427063948795944",
     "96842861631409942",
     "968434026831974498",
+    "96846060210481002",
     "968490396983274009",
     "968491421117849443",
     "968492126102435038",
@@ -4013,6 +4013,11 @@
     "2026-10-16: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-16: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-16: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
+    "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
+    "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
@@ -4079,7 +4084,6 @@
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
-    "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
@@ -4157,11 +4161,6 @@
     "2026-10-16: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
-    "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
-    "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
-    "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
-    "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
-    "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
@@ -4480,6 +4479,7 @@
     "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
+    "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
@@ -4504,6 +4504,6 @@
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-16: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:"
   ],
-  "last_daily": "2026-10-15",
+  "last_daily": "2026-10-16",
   "last_weekly": "2026-W42"
 }
