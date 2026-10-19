@@ -1,9 +1,6 @@
 {
   "seen_filings": [],
   "seen_news": [
-    "961746841210448792",
-    "961755638524875844",
-    "961763113727319628",
     "961766198616339635",
     "96176920967992628",
     "961777695235211773",
@@ -138,6 +135,7 @@
     "962969695258507348",
     "962974458225563785",
     "962986374408788834",
+    "963034279518998065",
     "963051046268552603",
     "963066970295049201",
     "96307626272200871",
@@ -1796,6 +1794,7 @@
     "978668794109548184",
     "978670472288147982",
     "978677259467332244",
+    "97870606107753550",
     "978762947765078243",
     "978770721840441252",
     "978773319129607728",
@@ -2788,6 +2787,7 @@
     "988363131759274213",
     "988396763375997153",
     "988397028420647262",
+    "988404507474320482",
     "988404605318359366",
     "988409099579780280",
     "988412241233098576",
@@ -4003,6 +4003,12 @@
     "999995119665728187"
   ],
   "event_log": [
+    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
+    "2026-10-19: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
@@ -4144,7 +4150,7 @@
     "2026-10-19: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Dell Technologies (DELL), a tracked holding:",
+    "2026-10-19: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Nvidia (NVDA), a tracked holding:",
@@ -4357,13 +4363,6 @@
     "2026-10-19: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Intel (INTC), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
-    "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Palantir (PLTR), a tracked holding:",
@@ -4480,6 +4479,7 @@
     "2026-10-19: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Broadcom (AVGO), a tracked holding:",
+    "2026-10-19: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
@@ -4504,6 +4504,6 @@
     "2026-10-19: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:",
     "2026-10-19: NEWS MENTION \u2014 Oracle (ORCL), a tracked holding:"
   ],
-  "last_daily": "2026-10-18",
-  "last_weekly": "2026-W42"
+  "last_daily": "2026-10-19",
+  "last_weekly": "2026-W43"
 }
